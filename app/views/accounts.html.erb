@@ -1,0 +1,17 @@
+<h1>Welcome <%= @user.username %></h1>
+<h3>Here are your accounts</h3>
+<ol>
+  <% if @user.accounts.length == 0 %>
+    <h4>No accounts stored yet!</h4>
+  <% else %>
+  <% @user.accounts.each do |a| %>
+  <li><%= a.accountname %></li>
+  <% end %>
+  <% end %>
+</ol>
+<p>
+<a href="/account/new">Add Account</a>
+</p>
+<p>
+<a href="/">HOME</a>
+</p>
