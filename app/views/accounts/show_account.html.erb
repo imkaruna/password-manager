@@ -7,6 +7,9 @@
 <h3>Account Password</h3>
 <h4><%= @account.account_password %></h4>
 <hr>
+<h3>Password Expiry</h3>
+<h4><%= @account.password_expiry %></h4>
+<hr>
 <p>
 <a href="/accounts/<%= @account.id %>/edit">Edit</a> OR <form method="POST" action = "/accounts/<%= @account.id %>/delete">
         <input id="hidden" type="hidden" name="_method" value="delete">
