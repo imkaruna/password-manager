@@ -7,12 +7,12 @@
 <p><label>Account Password:</label>
 <input type="text" name="account_password" id="account_password" value="<%= @account.account_password %>"></p>
 <p><label>Password Expiry:</label>
-<input type="text" name="password_expiry" id="password_expiry" value="<%= @account.password_expiry %>"></p>
+<input type="number" name="password_expiry" id="password_expiry" value="<%= @account.password_expiry %>"></p>
 <input type="submit" name="submit" value="SAVE">
+</form>
 <form method="POST" action = "/accounts/<%= @account.id %>/delete">
       <input id="hidden" type="hidden" name="_method" value="delete">
       <input name="submit" type="submit" value="DELETE">
   </form>
-</form>
 
 <a href="/">HOME</a> | <a href="/logout">LOGOUT</a>
