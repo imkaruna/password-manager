@@ -1,0 +1,16 @@
+<h1>Edit Account  </h1>
+<form method="post" action="/accounts/<%= @account.id %>/edit">
+<p><label>Account Name</label>
+<input type="text" name="account_name" id="account_name" value="<%= @account.account_name %>"></p>
+<p><label>Account UserName</label>
+<input type="text" name="account_username" id="account_username" value="<%= @account.account_username %>"></p>
+<p><label>Account Password:</label>
+<input type="text" name="account_password" id="account_password" value="<%= @account.account_password %>"></p>
+<input type="submit" name="submit" value="SAVE">
+<form method="POST" action = "/accounts/<%= @account.id %>/delete">
+      <input id="hidden" type="hidden" name="_method" value="delete">
+      <input name="submit" type="submit" value="DELETE">
+  </form>
+</form>
+
+<a href="/">HOME</a> | <a href="/logout">LOGOUT</a>

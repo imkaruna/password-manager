@@ -1,0 +1,25 @@
+<p style="text-align:center; ">
+  <h1>Welcome <%= @user.username %></h1>
+<h3>Here are your accounts</h3>
+<ol style="width:10%;">
+  <% if @user.accounts.length == 0 %>
+    <h4>No accounts stored yet!</h4>
+  <% else %>
+  <% @user.accounts.each do |a| %>
+  <li><a href="/accounts/<%= a.id %>/edit"><%= a.account_name %></a>
+    <p><form method="POST" action = "/accounts/<%= a.id %>/delete">
+          <input id="hidden" type="hidden" name="_method" value="delete">
+          <input name="submit" type="submit" value="Delete">
+      </form></p>
+      <hr>
+    </li>
+  <% end %>
+  <% end %>
+</ol>
+<p>
+<a href="/account/new">Add Account</a>
+</p>
+<p>
+<a href="/">HOME</a> | <a href="/logout">LOGOUT</a>
+</p>
+</p>

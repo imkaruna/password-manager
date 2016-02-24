@@ -1,0 +1,16 @@
+<h3>Account name</h3>
+<h4><%= @account.account_name %></h4>
+<hr>
+<h3>Account Username</h3>
+<h4><%= @account.account_username %></h4>
+<hr>
+<h3>Account Password</h3>
+<h4><%= @account.account_password %></h4>
+<hr>
+<p>
+<a href="/accounts/<%= @account.id %>/edit">Edit</a> OR <form method="POST" action = "/accounts/<%= @account.id %>/delete">
+        <input id="hidden" type="hidden" name="_method" value="delete">
+        <input name="submit" type="submit" value="Delete">
+      </form>
+</p>
+<a href="/">HOME</a> | <a href="/logout">LOGOUT</a>
