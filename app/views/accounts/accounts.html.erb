@@ -6,7 +6,7 @@
     <h4>No accounts stored yet!</h4>
   <% else %>
   <% @user.accounts.each do |a| %>
-  <li><a href="/accounts/<%= a.id %>/edit"><%= a.account_name %></a>
+  <li><a href="/accounts/<%= a.id %>"><%= a.account_name %></a>
     <p><form method="POST" action = "/accounts/<%= a.id %>/delete">
           <input id="hidden" type="hidden" name="_method" value="delete">
           <input name="submit" type="submit" value="Delete">

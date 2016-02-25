@@ -1,4 +1,4 @@
-<h1>Login</h1>
+<h1>Add New Account</h1>
 <form method="post" action="/accounts">
 <p><label>Account Name</label>
 <input type="text" name="account_name" id="account_name"></p>
@@ -7,7 +7,7 @@
 <p><label>Account Password:</label>
 <input type="text" name="account_password" id="account_password"></p>
 <p><label>Password Expiry:</label>
-<input type="number" name="password_expiry" id="password_expiry" value="<%= @account.password_expiry %>"></p>
+<input type="number" name="password_expiry" id="password_expiry"></p>
 <input type="submit" name="submit" value="ADD">
 </form>
 

@@ -68,7 +68,7 @@ class ApplicationController < Sinatra::Base
   post '/accounts' do
       if (params[:account_name] != "") && (params[:account_password]!="")
         @user = User.find_by(id: session[:id])
-        @user.accounts << Account.create(account_name: params[:account_name],account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry])
+        @user.accounts << Account.create(account_name: params[:account_name],account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry], password_changed_date: DateTime.now)
         @user.save
         redirect '/accounts'
       else
@@ -117,7 +117,7 @@ class ApplicationController < Sinatra::Base
     if is_logged_in?
       @user = User.find_by(id: session[:id])
       @account = @user.accounts.find_by(id: params[:id])
-      @account.update(account_name: params[:account_name], account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry])
+      @account.update(account_name: params[:account_name], account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry], password_changed_date: DateTime.now)
       redirect "/accounts/#{@account.id}"
     else
       redirect '/login'

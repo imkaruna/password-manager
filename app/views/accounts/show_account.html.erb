@@ -9,9 +9,14 @@
 <hr>
 <h3>Password Expiry</h3>
 <h4><%= @account.password_expiry %> days</h4>
+<% if session[:message] == "Password was changed" %>
+<p>Last changed on <%= @account.password_changed_date %></p>
+<% else %>
+<p></p>
+<% end %>
 <hr>
 <p>
-<a href="/accounts/<%= @account.id %>/edit">Edit</a> <form method="POST" action = "/accounts/<%= @account.id %>/delete">
+<a href="/accounts/<%= @account.id %>/edit">Edit</a><form method="POST" action = "/accounts/<%= @account.id %>/delete">
         <input id="hidden" type="hidden" name="_method" value="delete">
         <input name="submit" type="submit" value="Delete">
       </form>
