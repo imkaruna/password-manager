@@ -5,6 +5,7 @@ class Account < ActiveRecord::Base
     todays_date = DateTime.now
     #binding.pry
     expiry_date = self.password_changed_date
-    return (expiry_date - todays_date).to_i
+    num_of_days_to_expiry = self.password_expiry
+    return num_of_days_to_expiry - (todays_date - expiry_date).to_i
   end
 end
