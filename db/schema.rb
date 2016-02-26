@@ -11,16 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223185722) do
+ActiveRecord::Schema.define(version: 20160225025142) do
 
   create_table "accounts", force: :cascade do |t|
-    t.string "accountname"
-    t.string "accountpassword"
+    t.string  "account_name"
+    t.string  "account_password"
+    t.integer "user_id"
+    t.string  "account_username"
+    t.integer "password_expiry"
+    t.date    "password_changed_date"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.string "password"
+    t.string "password_digest"
     t.string "email"
   end
 
