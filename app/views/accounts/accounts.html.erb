@@ -1,6 +1,8 @@
 <p style="text-align:center; ">
   <h1>Welcome <%= @user.username %></h1>
 <h3>Here are your accounts</h3>
+<i>Its recommended that account passwords be changed every 3 to 6 months.</i>
+<i style="color:red;"><%= session[:message] %></i>
 <ol style="width:10%;">
   <% if @user.accounts.length == 0 %>
     <h4>No accounts stored yet!</h4>

@@ -8,11 +8,12 @@
 <h4><%= @account.account_password %></h4>
 <hr>
 <h3>Password Expiry</h3>
+
 <h4><%= @account.password_expiry %> days</h4>
-<% if session[:message] == "Password was changed" %>
+<% if session[:message] != "0" %>
 <p>Last changed on <%= @account.password_changed_date %></p>
 <% else %>
-<p></p>
+<p><%= session[:message]%> days ago</p>
 <% end %>
 <hr>
 <p>
