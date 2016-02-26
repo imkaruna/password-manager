@@ -8,20 +8,25 @@ class ApplicationController < Sinatra::Base
     enable :sessions
     set :session_secret, "secret"
   end
+
   get '/' do
     if is_logged_in?
       redirect '/accounts'
     else
+      session[:message]=""
       erb :'index.html'
     end
   end
 
   get '/signup' do
     erb :'user/signup.html'
+
   end
 
   post '/signup' do
+
     if(params[:username]=="")||(params[:password]=="")||(params[:email]=="")
+      session[:message]= "Please fill in all the fields"
       redirect '/signup'
     else
       @user = User.find_or_create_by(username: params[:username])
@@ -29,6 +34,7 @@ class ApplicationController < Sinatra::Base
       @user.email = params[:email]
       @user.save
       session[:id]=@user.id
+      session[:message] =""
       redirect '/accounts'
     end
   end
@@ -43,13 +49,16 @@ class ApplicationController < Sinatra::Base
 
   post '/login' do
     if (params[:username]=="") || (params[:password]=="")
+      session[:message]="Username and Password cannot be blank!"
       redirect '/login'
     else
       user = User.find_by(username: params[:username])
       if user && user.authenticate(params[:password])
         session[:id] = user.id
+        session[:message]=""
         redirect '/accounts'
       else
+        session[:message] = "Could not authenticate username or password. Please try again!"
         redirect '/login'
       end
     end
@@ -58,8 +67,10 @@ class ApplicationController < Sinatra::Base
   get '/accounts' do
     if is_logged_in?
       @user = User.find_by(id: session[:id])
+      session[:message]=""
       erb :'accounts/accounts.html'
     else
+      session[:message]="Please login"
       redirect '/login'
     end
 
@@ -89,6 +100,7 @@ class ApplicationController < Sinatra::Base
       @account = @user.accounts.find_by(id: params[:id])
       erb :'accounts/show_account.html'
     else
+      session[:message] = "You need to be logged in to view that page!"
       redirect '/login'
     end
   end
@@ -99,6 +111,7 @@ class ApplicationController < Sinatra::Base
       @account = @user.accounts.find_by(id: params[:id])
       erb :'accounts/show_account.html'
     else
+      session[:message] = "You need to be logged in to view that page!"
       redirect '/login'
     end
   end
@@ -109,17 +122,24 @@ class ApplicationController < Sinatra::Base
       @account = @user.accounts.find_by(id: params[:id])
       erb :'accounts/edit_account.html'
     else
+      session[:message] = "You need to be logged in to view that page!"
       redirect '/login'
     end
   end
 
   post '/accounts/:id/edit' do
     if is_logged_in?
+      #binding.pry
       @user = User.find_by(id: session[:id])
       @account = @user.accounts.find_by(id: params[:id])
-      @account.update(account_name: params[:account_name], account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry], password_changed_date: DateTime.now)
+      if params[:account_password] != @account.account_password
+        @account.password_changed_date = DateTime.now
+        session[:message] = "Password changed "+@account.password_expires + "days ago"
+      end
+      @account.update(account_name: params[:account_name], account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry])
       redirect "/accounts/#{@account.id}"
     else
+      session[:message] = "You need to be logged in to view that page!"
       redirect '/login'
     end
   end
@@ -129,12 +149,13 @@ class ApplicationController < Sinatra::Base
     if is_logged_in?
       if session[:id] == @account.user_id
         @account.delete
+        session[:message] = "Account deleted"
         redirect '/accounts'
       else
+        session[:message] = "You need to be logged in to view that page!"
         redirect 'user/login'
       end
     end
-
   end
 
   get '/logout' do
