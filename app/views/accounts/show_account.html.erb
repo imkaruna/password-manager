@@ -1,25 +1,19 @@
-<h3>Account name</h3>
-<h4><%= @account.account_name %></h4>
-<hr>
-<h3>Account Username</h3>
-<h4><%= @account.account_username %></h4>
-<hr>
-<h3>Account Password</h3>
-<h4><%= @account.account_password %></h4>
-<hr>
-<h3>Password Expiry</h3>
+<h1>Welcome <%= @user.username %></h1>
+<h3>Account details for <%= @account.account_name %></h3>
 
-<h4><%= @account.password_expiry %> days</h4>
-<% if session[:message] != "0" %>
-<p>Last changed on <%= @account.password_changed_date %></p>
-<% else %>
-<p><%= session[:message]%> days ago</p>
-<% end %>
-<hr>
+<p><strong>Account Username</strong>: <%= @account.account_username %></p>
+
+<p><strong>Account Password</strong>: <%= @account.account_password %></p>
+
+<p><strong>Password Expires in</strong>: <%= @account_password_expires_in %></p>
+<p><%= session[:message] %></p>
+
 <p>
-<a href="/accounts/<%= @account.id %>/edit">Edit</a><form method="POST" action = "/accounts/<%= @account.id %>/delete">
-        <input id="hidden" type="hidden" name="_method" value="delete">
-        <input name="submit" type="submit" value="Delete">
-      </form>
+  <a href="/accounts/<%= @account.id %>/edit">Edit</a>
+  <form method="POST" action = "/accounts/<%= @account.id %>/delete">
+          <input id="hidden" type="hidden" name="_method" value="delete">
+          <input name="submit" type="submit" value="Delete">
+  </form>
 </p>
+<hr>
 <a href="/">HOME</a> | <a href="/logout">LOGOUT</a>

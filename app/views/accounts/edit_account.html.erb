@@ -1,4 +1,5 @@
-<h1>Edit Account  </h1>
+<h1>Welcome <%= @user.username %></h1>
+<h3>Edit Account  </h3>
 <form method="post" action="/accounts/<%= @account.id %>/edit">
 <p><label>Account Name</label>
 <input type="text" name="account_name" id="account_name" value="<%= @account.account_name %>"></p>
