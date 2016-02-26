@@ -70,7 +70,7 @@ class ApplicationController < Sinatra::Base
       session[:message]=""
       erb :'accounts/accounts.html'
     else
-      session[:message]="Please login"
+      session[:message]="Please login to view that page"
       redirect '/login'
     end
 
@@ -98,6 +98,7 @@ class ApplicationController < Sinatra::Base
     if is_logged_in?
       @user = User.find_by(id: session[:id])
       @account = @user.accounts.find_by(id: params[:id])
+      @account_password_expires_in = @account.password_expires.to_s + " days"
       erb :'accounts/show_account.html'
     else
       session[:message] = "You need to be logged in to view that page!"
@@ -107,6 +108,7 @@ class ApplicationController < Sinatra::Base
 
   post '/accounts/:id' do
     if is_logged_in?
+      #binding.pry
       @user = User.find_by(id: session[:id])
       @account = @user.accounts.find_by(id: params[:id])
       erb :'accounts/show_account.html'
@@ -129,14 +131,16 @@ class ApplicationController < Sinatra::Base
 
   post '/accounts/:id/edit' do
     if is_logged_in?
-      #binding.pry
+      #cdbinding.pry
       @user = User.find_by(id: session[:id])
       @account = @user.accounts.find_by(id: params[:id])
+      @account_password_expires_in = @account.password_expires.to_s + "days"
       if params[:account_password] != @account.account_password
+      else
         @account.password_changed_date = DateTime.now
-        session[:message] = "Password changed "+@account.password_expires + "days ago"
       end
       @account.update(account_name: params[:account_name], account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry])
+      session[:message] = "Password changed on " + @account.password_changed_date
       redirect "/accounts/#{@account.id}"
     else
       session[:message] = "You need to be logged in to view that page!"
