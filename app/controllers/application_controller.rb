@@ -66,7 +66,7 @@ class ApplicationController < Sinatra::Base
 
   get '/accounts' do
     if is_logged_in?
-      @user = User.find_by(id: session[:id])
+      @user = current_user
       session[:message]=""
       erb :'accounts/accounts.html'
     else
@@ -78,9 +78,10 @@ class ApplicationController < Sinatra::Base
 
   post '/accounts' do
       if (params[:account_name] != "") && (params[:account_password]!="")
-        @user = User.find_by(id: session[:id])
-        @user.accounts << Account.create(account_name: params[:account_name],account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry], password_changed_date: DateTime.now)
-        @user.save
+        # creata n account that is pre associated and saved with the user.
+        current_user.accounts.build(account_name: params[:account_name],account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry], password_changed_date: DateTime.now)
+        # current_user.accounts << Account.create(account_name: params[:account_name],account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry], password_changed_date: DateTime.now)
+        current_user.save
         redirect '/accounts'
       else
         erb :'accounts/accounts.html'
@@ -89,14 +90,14 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/account/new' do
-    @user = User.find_by(id: session[:id])
+    @user = current_user
     erb :'accounts/new_account.html'
   end
 
 
   get '/accounts/:id' do
     if is_logged_in?
-      @user = User.find_by(id: session[:id])
+      @user = current_user
       @account = @user.accounts.find_by(id: params[:id])
       @account_password_expires_in = @account.password_expires.to_s + " days"
       erb :'accounts/show_account.html'
@@ -109,7 +110,7 @@ class ApplicationController < Sinatra::Base
   post '/accounts/:id' do
     if is_logged_in?
       #binding.pry
-      @user = User.find_by(id: session[:id])
+      @user = current_user
       @account = @user.accounts.find_by(id: params[:id])
       erb :'accounts/show_account.html'
     else
@@ -120,7 +121,7 @@ class ApplicationController < Sinatra::Base
 
   get '/accounts/:id/edit' do
     if is_logged_in?
-      @user = User.find_by(id: session[:id])
+      @user = current_user
       @account = @user.accounts.find_by(id: params[:id])
       erb :'accounts/edit_account.html'
     else
@@ -131,9 +132,8 @@ class ApplicationController < Sinatra::Base
 
   post '/accounts/:id/edit' do
     if is_logged_in?
-      #cdbinding.pry
-      @user = User.find_by(id: session[:id])
-      @account = @user.accounts.find_by(id: params[:id])
+      @account = current_user.accounts.find_by(id: params[:id])
+      @user = current_user
       @account_password_expires_in = @account.password_expires.to_s + "days"
       if params[:account_password] != @account.account_password
       else
@@ -142,6 +142,7 @@ class ApplicationController < Sinatra::Base
       @account.update(account_name: params[:account_name], account_username: params[:account_username], account_password: params[:account_password], password_expiry: params[:password_expiry])
       session[:message] = "Password changed on " + @account.password_changed_date
       redirect "/accounts/#{@account.id}"
+      #current_user
     else
       session[:message] = "You need to be logged in to view that page!"
       redirect '/login'
@@ -173,7 +174,18 @@ class ApplicationController < Sinatra::Base
       end
 
       def current_user
-        User.find(session[:id])
+        # the first time we call this method in a request, find the user,
+        # the second time, just return the previously found user.
+        # # how do we know if this method has been call before
+        # if @user.nil?        # avoid hitting the db twice...
+        #   @user = User.find(session[:id]) # #<User>
+        # else
+        #   @user
+        # end
+
+        # if @user exists, return otherwise, set it equal to user.find
+        @user ||= User.find(session[:id])
+
       end
     end
 
