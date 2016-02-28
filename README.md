@@ -5,6 +5,6 @@ You can now store your passwords in one single place!
 
 ###Using this app
 
-Markup : * Fork this repo
-         * run `rake db:migration`
-         * run `shotgun`
+  * Fork this repo
+  * run `rake db:migration`
+  * run `shotgun`
